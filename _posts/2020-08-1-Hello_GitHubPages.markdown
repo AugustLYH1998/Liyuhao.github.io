@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
-date:   2018-05-17 14:05:21 +0800
-tags: jekyll update
+title:  Hello_GitHubPages!!
+date: 2020-08-01 00:12:21 +0800
+tags: GitHubPages
 color: rgb(255,90,90)
 cover: ' /Liyuhao.github.io /assets/test.png'
-subtitle: 'Welcome to Jekyll!'
+subtitle: 不积跬步无以至千里
 ---
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
