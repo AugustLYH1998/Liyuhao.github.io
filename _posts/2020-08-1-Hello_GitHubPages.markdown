@@ -4,25 +4,7 @@ title:  Hello_GitHubPages!!
 date: 2020-08-01 00:12:21 +0800
 tags: GitHubPages
 color: rgb(255,90,90)
-cover: ' /Liyuhao.github.io /assets/test.png'
+cover: '/Liyuhao.github.io/assets/test.png'
 subtitle: 不积跬步无以至千里
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
-
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
-
-Jekyll also offers powerful support for code snippets:
-
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+第一天搭建GitHubPages，用了一个晚上的时间，收货颇丰，安装了`jekyll`，`ruby`，认识了`Markdown`，期间遇到很多问题但都一一解决了。加油！
