@@ -19,26 +19,27 @@ NickName: '77'
 webtitle: 'LIYUHAO'
 bio: ''
 about: true
-aboutyou: 'CHINA Chengdu 1998 '
+aboutyou1: 'CHINA Chengdu 1998'
+aboutyou2: 'Email - 1084399812@qq.com'
 portraits: '/assets/profile.jpeg' 
 
 # SNS
 SNS: true
-SNS-icon: #['Facebook', 'weibo', 'qq', 'github', 'Dribbble', 'Twitter', 'instagram', 'weixin', 'Codepen']
+SNS-icon: 
   mail: '1084399812@qq.com'
-  weixin: 'EchoCrash1998'
+  weixin: '12313'
   qq: '1084399812'
-  github: ''
-  Codepen: ''
-  weibo: ''
-  instagram: ''
-  Twitter: ''
-  Dribbble: ''
-  Facebook: ''
-  Google: ''
-  zhihu: ''
-  juejin: ''
-  twitch: ''
+  github: 'https://github.com/AugustLYH1998'
+  #Codepen: ''
+  weibo: 'null'
+  instagram: 'null'
+  Twitter: 'null'
+  #Dribbble: ''
+  Facebook: 'null'
+  Google: 'null'
+  zhihu: 'null'
+  juejin: 'null'
+  twitch: 'null'
 
 # 分页
 paginate: 2
@@ -55,10 +56,12 @@ kramdown:
 # 代码高亮 使用rouge
 highlighter: rouge
 # 代码高亮主题使用pygments主题: autumn\ default\ emacs\ friendly\ manni\ murphy\ pastie\ perldoc\ tango 任选一个你喜欢的主题名称填在下面的单引号中
-pygmentsTheme: 'default'
+pygmentsTheme: 'perldoc'
 
 # 友情链接
 friends:
+  我的github : https://github.com/AugustLYH1998
+  kinghtxg's blog : https://kinghtxg.github.io
   jekyll: 'https://www.jekyll.com.cn/'
 
 # 评论 最佳体验 在disqus、livere和Gitment之间三选一
@@ -67,7 +70,7 @@ disqus: false
 disqus_url: '' # https://abc.disqus.com/embed.js
 # 来必力评论
 livere: true
-livere_uid: 'MTAyMC8zNDI2OS8xMDgwNg==' # MTAyMC8zNDI2OS8xMDgwNg==
+livere_uid: 'MTAyMC81MTE5OC8yNzY3OQ==' # MTAyMC81MTE5OC8yNzY3OQ==
 # Gitment评论 OAuth Application
 Gitment: false
 Gitment_owner: ''  # github用户名
@@ -81,7 +84,7 @@ social-share-items: ['qq', 'wechat', 'weibo', 'twitter', 'facebook']
 
 # 百度统计 在baidu-url里填写自己相关的url代码
 baidu: true
-baidu-url: ''
+baidu-url: '34952a524e6f09ddef5210d3f57d66e8'
 # 谷歌分析 在google-ID里填写自己在谷歌分析获得的追踪ID
 google: false
 google-ID: ''

@@ -2,7 +2,7 @@
 layout: default
 title: 关于我
 page-title: aboutMe
-home-title: Show you about me.
+home-title: 关于我.
 description:
 ---
 
@@ -17,12 +17,15 @@ description:
           <span id="yourname">{{ site.name }}</span>
           <span id="yourbio">{{ site.bio }}</span>
           {% if site.about %}
-            <span id="aboutyou">{{ site.aboutyou }}</span>
+            <span id="aboutyou1">{{ site.aboutyou1 }}</span>
+            <br>
+            <span id="aboutyou2">{{ site.aboutyou2 }}</span>
+            <br>
           {% endif %}
         {% endif %}
         {% if site.SNS %}
           {% for sns-icon in site.SNS-icon %}
-            <a href="{{ sns-icon[1] }}" title="{{ sns-icon[0] }}">
+            <a href="#" title="{{ sns-icon[0] }}" onclick="javascript:alert('{{ sns-icon[1] }}')">
               <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-{{ sns-icon[0] }}"></use>
               </svg>

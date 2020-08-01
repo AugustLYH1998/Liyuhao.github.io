@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Hello_GitHubPages!!
-date: 2020-08-01 00:12:21 +0800
+date: 2020-07-31 23:57:21 +0800
 tags: GitHubPages
 color: rgb(255,90,90)
 cover: '/assets/test.png'
