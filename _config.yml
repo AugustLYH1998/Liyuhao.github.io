@@ -74,7 +74,7 @@ livere: true
 livere_uid: 'MTAyMC81MTE5OC8yNzY3OQ==' # MTAyMC81MTE5OC8yNzY3OQ==
 
 # Gitment评论 OAuth Application
-Gitment: true
+Gitment: false
 Gitment_owner: 'AugustLYH1998'  # github用户名
 Gitment_repo: 'augustlyh1998.github.io'  # github博客存放的仓库名
 client_id: '70e5cec83260409daad5'  # 注册 OAuth Application 后获得的 client_id
