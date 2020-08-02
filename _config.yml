@@ -1,3 +1,5 @@
+future: true
+
 # Site settings 配置站点
 title: 'Welcome'
 description: 'Liyuhao blog'

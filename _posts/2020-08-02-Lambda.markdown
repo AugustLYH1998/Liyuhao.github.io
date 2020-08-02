@@ -1,0 +1,167 @@
+---
+layout: post
+title:  Lambda
+date: 2020-08-02 22:26:17
+tags: Java
+color: rgb(148,0,211)
+cover: '/assets/2020-08-02-Lambda.png'
+subtitle: Lambda笔记整合
+---
+
+
+
+# 	Lambda表达式
+```
+(匿名内部类被重写方法的形参列表) -> {
+	被重写方法的方法体代码
+}
+->就是一个新语法，没有实际含义，但是不能省略
+```
+
+# Lambda表达式的使用前提: 
+(1) Lambda表达式并不能简化所有匿名内部类的写法。
+(2) Lambda表达式只能简化接口中只有一个抽象方法的匿名内部类形式。（函数式接口）
+# Lambda表达式只能简化==函数式接口==的匿名内部类写法: 
+a.首先必须是接口。
+b.接口中只能有一个抽象方法。
+
+
+---
+# 函数式接口：
+
+Java当中使用Lambda表达式的前提是，必须有“函数式接口”
+
+**函数式接口**：有且仅有一个抽象方法的接口，叫做函数式接口。
+
+如何才能万无一失地检测一下当前接口是不是函数式接口呢？
+用一个固定的格式写在public interface之前一行即可：
+ - @FunctionalInterface
+public interface 函数式接口名｛
+	xxxx...
+｝
+
+```
+@FunctionalInterface
+public interface Calculator {
+	public abstract int sum(int a,int b);
+	
+}
+```
+
+---
+
+# Lambda表达式的省略写法:
+(1) 如果Lambda表达式的方法体代码只有一行代码。可以省略大括号不写，同时要省略分号。
+```java
+
+        Thread t2 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName()+"执行");
+        });
+
+        Thread t3 = new Thread(() ->
+            System.out.println(Thread.currentThread().getName()+"执行")
+        );
+```
+
+(2) 如果Lambda表达式的方法体代码只有一行代码。可以省略大括号不写。
+此时，如果这行代码是return语句，必须省略return不写，同时也必须省略";"不写
+```java
+        Collections.sort(ls,(Student o3, Student o4) ->{
+            return o3.getAge()-o4.getAge();
+        });
+
+        Collections.sort(ls,(Student o3, Student o4) ->o3.getAge()-o4.getAge());
+
+```
+
+(3) 参数类型可以省略不写。
+```java
+   Collections.sort(ls,( o3,  o4) ->o3.getAge()-o4.getAge());
+```
+(4) 如果只有一个参数，参数类型可以省略，同时()也可以省略。
+
+
+---
+
+# Lambda表达式简化Runnable接口的匿名内部类写法
+@FunctionalInterface函数式接口注解：
+一旦某个接口加上了这个注解，这个接口只能有且仅有一个抽象方法。
+这个接口就可以被Lambda表达式简化。
+
+```java
+        //不使用lambda
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName()+"执行");
+            }
+        });
+        t1.start();
+
+        //使用lambda
+        Thread t2 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName()+"执行");
+        });
+        t2.start();
+
+```
+
+---
+
+# Lambda简化Comparator接口匿名内部类写法
+```java
+   //Lambda简化Comparator接口匿名内部类写法
+
+    public static void main(String[] args) {
+
+        List<Student> ls = new ArrayList<>();
+        Student s1 = new Student("小明",25);
+        Student s2 = new Student("小黑",23);
+        Student s3 = new Student("小红",22);
+
+        Collections.addAll(ls,s1,s2,s3); //collections工具类
+
+        //按年龄排序
+        Collections.sort(ls, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                return o1.getAge() -o2.getAge();
+            }
+        });
+        System.out.println(ls);//[Student{name='小红', age=22}, Student{name='小黑', age=23}, Student{name='小明', age=25}]
+
+        //使用lambda简化
+        Collections.sort(ls,(Student o3, Student o4) ->{
+            return o3.getAge()-o4.getAge();
+        });
+        System.out.println(ls);
+
+    }
+
+```
+
+---
+# Lambda表达式遍历 forEach
+
+==前提条件：jdk1.8之后使用==
+```java
+public class CollectionTest {
+    public static void main(String[] args) {
+    
+        Collection<String> ls = new ArrayList<>();
+        ls.add("地球");
+        ls.add("宇宙");
+        ls.add("火星");
+
+
+        ls.forEach(ele ->{
+            System.out.println(ele);
+        });
+
+        ls.forEach(ele -> System.out.println(ele));
+
+        ls.forEach(System.out::println);
+
+    }
+}
+```
