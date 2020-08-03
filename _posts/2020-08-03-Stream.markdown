@@ -1,0 +1,290 @@
+---
+layout: post
+title:  Stream
+date: 2020-08-03 18:49:36
+tags: Java
+color: rgb(34,139,34)
+cover: '/assets/2020-08-03-Stream.png'
+subtitle: Stream流笔记整合
+---
+
+
+
+---
+
+# 什么是stream流?
+
+
+# 一、什么是stream流?
+
+在Java 8中，得益于Lambda所带来的函数式编程，引入了一个全新的stream流概念，用于解决已有集合/数组类库有的弊端。
+
+# Stream流能解决什么问题?
+可以解决已有集合类库或者数组API的弊端。
+stream认为集合和数组操作的API很不好用，所以采用了stream流简化集合和数组的操作。
+
+---
+
+ # 二、stream获取流
+#  stream流式思想的核心
+1. 先得到集合或者数组的stream流(就是一根传送带)，
+2. 然后就用这个stream流操作集合或者数组的元素。
+3. 然后用stream流简化替代集合操作的API 。
+
+Java8当中的“流”其实就是Stream接口的对象；
+JDK提供了一个流接口：java.util.stream.String<T>
+
+# **如何获取流？**
+ - 1.根据集合获取流：
+```java
+集合名称.stream()
+```
+
+ - 2.根据数组获取流：
+```java
+Arrays.stream(数组名)
+Stream.of(数组名称)
+```
+总结：
+```java
+集合: 
+	集合名.stream();
+数组: 
+	Arrays.stream(数组名);
+	Stream.of(数组名);
+```
+
+
+
+
+
+# 三、Stream流常用API
+
+```java
+    public static void main(String[] args) {
+
+        List<String> ls = new ArrayList<>();
+        ls.add("小白");
+        ls.add("小黑子");
+        ls.add("蓝天白");
+        ls.add("小红");
+
+        //过滤出长度为3的字符串
+        ls.stream().filter( s -> s.length()==3 );
+
+        //foreach循环打印
+        ls.stream().filter( s -> s.length()==3 ).forEach(System.out::println);
+
+        //count计数
+        long count = ls.stream().filter(s -> s.length() == 3).count();
+        System.out.println(count);
+        
+        //limit获取前几个
+        ls.stream().filter(s -> s.length() == 3).limit(1).forEach(System.out::println);
+
+        //skip跳过前几个
+        ls.stream().filter(s -> s.length() == 3).skip(1).forEach(System.out::println);
+
+        //map映射，变为新的字符串
+        ls.stream().map(a -> a + "新的字符串").forEach(System.out::println);
+
+        //map转为一个学生对象
+        ls.stream().map( b -> new Student(b,22)).forEach(System.out::println);
+
+    }
+```
+
+## forEach : 逐一处理(遍历)
+
+```java
+//foreach循环打印
+ls.stream().filter( s -> s.length()==3 ).forEach(System.out::println);
+```
+## count:
+
+统计个数
+long count () ;
+
+```java
+//count计数
+long count = ls.stream().filter(s -> s.length() == 3).count();
+System.out.println(count);
+```
+## filter : 过滤元素
+
+-- Stream<T> filter (Predicate<? super T> predicate)
+
+```java
+//过滤出长度为3的字符串
+ls.stream().filter( s -> s.length()==3 );
+```
+
+## limit : 取前几个元素
+
+```java
+//limit获取前几个
+ls.stream().filter(s -> s.length() == 3).limit(1).forEach(System.out::println);
+```
+## skip : 跳过前几个
+
+```java
+ //skip跳过前几个
+ls.stream().filter(s -> s.length() == 3).skip(1).forEach(System.out::println);
+```
+## map : 映射 相当于一个加工方法
+
+将这个对象变为另外一个对象
+
+```java
+ //map映射，变为新的字符串
+ls.stream().map(a -> a + "新的字符串").forEach(System.out::println);
+
+//map转为一个学生对象
+ls.stream().map( b -> new Student(b,22)).forEach(System.out::println);
+```
+
+## concat : 合并流
+
+```java
+    public static void main(String[] args) {
+
+        List<String> ls = new ArrayList<>();
+        ls.add("小白");
+        ls.add("小黑子");
+        ls.add("蓝天白");
+        ls.add("小红");
+
+        //数组流
+        Stream<Integer> s1 = Stream.of(10, 20, 30, 40);
+
+        //集合流
+        Stream<String> s2 = ls.stream();
+
+        //合并流
+        //合并类型不一样用objects
+        //Stream<? extends Serializable> concat = Stream.concat(s1, s2);
+        Stream<Object> concat = Stream.concat(s1, s2);
+
+        concat.forEach(System.out::println);
+        
+    }
+```
+
+---
+
+
+
+# 四、并发的Stream流
+
+流当中的元素如果特别多，那么只有一个“工人”在逐一处理，肯定比较慢。
+如果对流当中的元素，使用多个“工人”同时处理，这就是“并发”。
+
+**如何才能获取“并发流”（支持并发操作的流）:**
+
+```java
+.parallelStream()
+```
+**如果已经获取了一个普通的流，那么再调用一下.parallel()方法也会变成“并发流”:**
+```java
+.stream().parallel()
+```
+
+**注意事项：**
+ - 1.使用“并发流”操作时多个“工人”都在抢元素。
+ - 2.到底有多少个“工人”在抢、在同时操作呢？不用管JDK自己处理。
+ - 3.正确使用就不会出现，多个“工人”抢到同一个元素的情况。
+
+**总结：**
+ - 1.直接获取并发流：.parallelStream()
+ - 2.已结获取普通流，然后升级成为并发流：.stream().parallel
+
+
+```java
+public class StreamParallel {
+	public static void main(String[] args) {
+		ArrayList<String> list = new ArrayList<>();
+		for (int i = 0; i <= 100; i++) {
+			list.add("Hello - " + i);
+		}
+		//这是只有一个流在做打印输出的操作
+		list.stream().forEach(System.out::println);
+		
+		//获取一个并发流
+		list.parallelStream().forEach(System.out::println);
+		
+		//普通流调用变成并发流
+		list.stream().parallel().forEach(System.out::println);
+	}
+}
+```
+
+---
+
+
+
+# Java Stream流的终结与非终结方法
+
+## 终结方法：
+一旦stream调用了终结方法，流的操作就全部终结了，不能继续使用，只能创建新的Stream操作。
+
+终结方法有：
+foreach，count；
+不再支持链式编程。 
+
+```java
+ls.stream().forEach(System.out::println);
+
+long count = ls.stream().count();
+```
+
+## 非终结方法：
+每次调用完成以后返回一个新的流对象，可以继续使用，支持链式编程。
+
+
+
+---
+
+
+
+# 五、收集Stream流、流转数组、流转集合
+
+把stream流的数据转回成集合。
+
+stream的作用是把集合转换成一根传送带，借用stream流的强大功能进行的操作。
+但是实际开发中数据最终的形式还是应该是集合，最终stream流操作完毕以后还是要转换成集合。
+这就是收集Stream流。
+stream流是手段。
+集合才是目的。
+流只能使用一次。
+
+```java
+   public static void main(String[] args) {
+
+        List<String> ls = new ArrayList<>();
+        ls.add("小白");
+        ls.add("小黑子");
+        ls.add("蓝天白");
+        ls.add("小红");
+        ls.add("小红");
+
+
+        //stream流转set集合
+        Stream<String> stream = ls.stream().filter(s -> s.startsWith("小"));
+        Set<String> collect = stream.collect(Collectors.toSet());
+        System.out.println(collect);//[小黑子, 小白, 小红]
+
+
+        //stream流转list集合
+        Stream<String> stream1 = ls.stream().filter(s -> s.startsWith("小"));
+        List<String> collect1 = stream1.collect(Collectors.toList());
+        System.out.println(collect1);//[小白, 小黑子, 小红, 小红]
+
+
+        //stream流转数组
+        Stream<String> stream2 = ls.stream().filter(s -> s.startsWith("小"));
+        Object[] objects = stream2.toArray();
+        //可以借用构造器引用声明转换后数组的类型
+        String[] objects1 = stream2.toArray(String[]::new);
+
+    }
+```
