@@ -25,7 +25,7 @@ stream认为集合和数组操作的API很不好用，所以采用了stream流�
 
 ---
 
- # 二、stream获取流
+# 二、stream获取流
 #  stream流式思想的核心
 1. 先得到集合或者数组的stream流(就是一根传送带)，
 2. 然后就用这个stream流操作集合或者数组的元素。
@@ -59,6 +59,7 @@ Stream.of(数组名称)
 
 
 # 三、Stream流常用API
+
 
 ```java
     public static void main(String[] args) {
@@ -100,6 +101,7 @@ Stream.of(数组名称)
 //foreach循环打印
 ls.stream().filter( s -> s.length()==3 ).forEach(System.out::println);
 ```
+
 ## count:
 
 统计个数
