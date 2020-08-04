@@ -2,7 +2,7 @@
 layout: default
 title: 友情链接 - LYH·Blog
 page-title: friendLinks
-home-title: This is my friends.
+home-title: 我的链接和朋友
 description:
 ---
 
@@ -10,7 +10,14 @@ description:
 {% include boot.html %}
 <main>
     {% include title.html %}
+    
     <ul class="ex-list">
+        <li>
+          <span class="tag-name" >
+            <a href="https://blog.csdn.net/qq_43472877"> |&emsp;我的CSDN&emsp;| </a><br>
+            <a href="https://github.com/AugustLYH1998">|&emsp;我的GitHub&emsp;|</a>
+        </span>
+        </li>
         <li  class="fadeInUp animated">
           {% for friend in site.friends %}
             <span class="tag-name" >

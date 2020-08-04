@@ -44,7 +44,7 @@ SNS-icon:
   twitch: 'null'
 
 # 分页
-paginate: 2
+paginate: 5
 paginatepath: ['page:num']
 
 # since
@@ -62,8 +62,6 @@ pygmentsTheme: 'perldoc'
 
 # 友情链接
 friends:
-  我的CSDN : https://blog.csdn.net/qq_43472877
-  我的github : https://github.com/AugustLYH1998
   kinghtxg's blog : https://kinghtxg.github.io
   jekyll: 'https://www.jekyll.com.cn/'
 
