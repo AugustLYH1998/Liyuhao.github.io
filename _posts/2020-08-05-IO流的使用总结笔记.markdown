@@ -1,0 +1,306 @@
+---
+layout: post
+title: IO流
+date: 2020-08-05 22:24:26
+tags: Java
+color: rgb(255,140,0)
+cover: '/assets/2020-08-05-IO.png'
+subtitle: IO流的使用总结笔记
+---
+
+
+
+# IO流的体系：
+
+
+```java
+		字节流								字符流
+字节输入流			字节输出流			字符输入流		字符输出流
+InputStream			OutputStream		Reader			Writer     (抽象类)
+FileInputStream		FileOutputStream	FileReader		Filewriter (实现类)
+BufferedInputStream  BufferedOutputStream  BufferedReader BufferedWriter(实现类)
+```
+
+
+# FileInputstream文件字节输入流的使用
+
+**作用：**
+以内存为基准，把磁盘文件中的数据按照字节的形式读入到内存中的流。就是按照字节读取文件数据到内存。
+**构造器：**
+```java
+public FileInputStream(File path) : 创建一个字节输入流管道与源文件对象接通。
+public FileInputStream(String pathName) : 创建一个字节输入流管道与文件路径对接。
+```
+**方法：**
+```java
+1. public int read() :每次读取一个字节返回,读取完毕会返回-1。一次一个字节读。
+读取英文和数字没有问题，但是遇到中文会乱码，其会截断中文。
+中文UTF-8占3个字节。
+```
+举例：
+```java
+        FileInputStream file = new FileInputStream(new File("src/test.txt"));
+
+        int ch = 0; //存储读取的字节
+        while ((ch = file.read()) != -1){
+            System.out.print((char)ch);
+        }
+
+
+```
+
+---
+
+```java
+2. public int read(byte[] buffer) : 从字节输入流中读取字节到字节数组中去，
+返回读取的字节数量，没有字节可读返回-1。
+中文还是会乱码
+```
+
+举例：
+
+```java
+        FileInputStream file = new FileInputStream(new File("src/test.txt"));
+
+        byte []buffer = new byte[3]; //3个字节的读,定义一个字节数组
+        int len;//存储每次读取的字节数
+        while ((len = file.read(buffer)) != -1){
+            String rs = new String(buffer,0,len);
+            System.out.print(rs);
+        }
+```
+
+---
+
+# 解决字节输入流读取中文内容输出乱码的问题
+一个一个字节读取中文输出，一个一个字节数组读取中文输出均无法避免乱码。
+如何实现读取可以避免乱码呢？
+1. 可以使用字符流。FileReader。
+2. 使用字节流的话，可以==定义一个字节数组与文件的大小刚号一样大，然后全部读取全部字节数据再输出==。适用于读取小文件。
+
+```java
+        File file = new File("src/test.txt");
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        int length = (int) (file.length());
+        byte []buffer = new byte[length];//获取文件大小
+
+        int len = fileInputStream.read(buffer);
+        
+        String rs = new String(buffer);
+        System.out.println(rs);
+```
+JDK1.9后，java有自带API，readAllBytes()
+
+```java
+        File file = new File("src/test.txt");
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        byte[] bytes = fileInputStream.readAllBytes();
+        
+        String rs = new String(bytes);
+        System.out.println(rs);
+```
+
+小结：字节流并不适合读取文本文件内容输出，读写文件内容建议使用字符流。
+
+---
+
+# 字节流复制图片
+
+思路:
+①根据**数据源**创建**字节输入流对象**
+②根据**目的地**创建字**节输出流对象**
+③读写数据，复制图片(一次读取一个字节数组，一次写入一个字节数组)
+④释放资源
+```java
+public class CopyJpgDemo {
+	public static void main(String[] args) throws IOException {
+		// 输入流 对象
+		FileInputStream fis = new FileInputStream("img.jpg");
+
+		// 输出流 对象
+		FileOutputStream fos = new FileOutputStream("C:\\Users\\Administrator\\Desktop\\Copyimg.jpg");
+
+		// 读写数据，复制图片（一次读取一个字节数组，一次写入一个字节数组）
+		byte[] bys = new byte[1024];
+		int len;
+		while ((len = fis.read(bys)) != -1) {
+			fos.write(bys, 0, len);
+		}
+
+		fos.close();
+		fis.close();
+
+	}
+}
+```
+
+---
+
+# Fileoutputstream文件字节输出流
+**作用：**
+以内存为基准，把内存中的数据，按照字节的形式写出到磁盘文件中去。
+简单来说，把内存数据按照字节写出到磁盘文件中去。
+
+**构造器:**
+
+```java
+public Fileoutputstream(File file):
+创建一个字节输出流管道通向目标文件对象。
+
+public Fileoutputstream(String file):  String为文件路径
+创建一个字节输出流管道通向目标文件路径。
+
+public FileoutputStream(File file,boolean append):
+创建一个追加数据的字节输出流
+
+public Fileoutputstrean(String file,boolean append) : String为文件路径
+创建一个追加数据的字节输出流
+```
+
+**方法:**
+
+```java
+public void write(int a):
+写一个字节出去。
+
+public void write(byte[] buffer):
+写一个字节数组出去。
+
+public void write(byte[] buffer , int pos , int len):
+写一个字节数组的一部分出去
+参数一，字节数组;参数二:起始字节索引位置，参数三:写多少个字节数出去。
+```
+举例：
+
+```java
+    public static void main(String[] args) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("src/test2.txt",true);//开启追加模式
+        fileOutputStream.write(98); //添加字符b
+        fileOutputStream.write(new byte[]{97,98,99});//添加字符abc
+        fileOutputStream.write(new byte[]{97,98,99},1,2);//添加bc
+    }
+```
+
+---
+
+
+# FileWriter写数据的覆盖与追加
+
+在使用FileWriter时：
+1.如果指定的文件不存在，那么会自动创建该文件。
+2.如果指定的文件已经存在，那么将会覆盖写入。
+3.如果不希望覆盖写入，而是希望进行追加，那么要用另一种重载形式的构造方法。
+ - public FileWriter(String fileName,boolean append):
+第二个参数如果是true值，那么将会追加写入。
+```java
+public class FileWriter {
+	public static void main(String[] args) throws IOException {
+		//覆盖不加true
+		FileWriter fw = new FileWriter("file02.txt",true); //创,追加写入
+		
+		fw.write("Java"); //写
+		
+		fw.close();  //关
+	}
+}
+```
+
+---
+
+
+# FileReader用来将文本文件当中的字符读取到程序当中
+
+ - 使用步骤：
+ - 1.导包
+import java.io.FileReader;
+
+ - 2.创建：构造方法
+
+```java
+public FileReader(String fileName)：参数是文件的路径名。
+
+FileReader fr = new FileReader("filexxx.txt");
+
+如果制定的文件名对应的文件不存在，那么将会直接报错。
+```
+ - 3.使用：成员方法
+```java
+读取当个字符：public int read()
+读取下一个字符，得到对应的ASCII或Unicode，一个字符一个字符的读。读完返回-1。
+
+public int read(char[] buffer)
+读取一个字符数组，读取多少个字符就返回多少个数量。读完返回-1。
+
+
+关闭释放资源：public void close()
+```
+使用FileReader的三个步骤：创、读、关。
+
+```java
+public class FileReader {
+	public static void main(String[] args) throws IOException {
+		//创建
+		FileReader fr = new FileReader("file06.txt");
+		
+		//返回值为读取到的单个字符，对应的ASCII或者Unicod
+		int ch = fr.read();
+		System.out.println(ch);  //48
+		
+		ch = fr.read();
+		System.out.println(ch);  //65
+		
+		ch = fr.read();
+		System.out.println(ch);  //97
+		
+		ch = fr.read();
+		System.out.println(ch);  //-1代表没有更多字符可以读取
+		ch = fr.read();
+		System.out.println(ch);  //-1代表没有更多字符可以读取
+		
+		fr.close();
+		
+	}
+}
+```
+
+**注意事项：**
+1. 每次调用read方法，都会尝试读取下一个新字符。
+
+2. 一个int变量足额实施一个文字对应的ASCII值，那么可以通过格式将其翻译为文字：
+	强制转换类型：(char) 变量名称
+
+```java
+public class FileReaderWhile {
+	public static void main(String[] args) throws IOException {
+		//创建
+		FileReader fr = new FileReader("file06.txt");
+		
+		//返回值为读取到的单个字符，对应的ASCII或者Unicod
+		int ch;
+		while((ch =fr.read()) !=-1) {
+//			System.out.println(fr.read());  错误写法，每次read执行，都会会调用下一个字符
+			System.out.println((char) ch);
+		}
+		
+		fr.close();
+		
+	}
+}
+```
+
+
+---
+
+# BufferedReader的readLine方法：
+
+可以读取一整行字符串
+
+**public String readLine()**:读取一整行字符串，返回值当中不包含换行符。
+
+
+# BufferedWriter的newLine方法
+
+ -  BufferedWriter额外提供了一个换行方法：
+ **public void newLine()**:将会自动根据操作系统的不同，选择\r\n或者是\r或者是\n。
