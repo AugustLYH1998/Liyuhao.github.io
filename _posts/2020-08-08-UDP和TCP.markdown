@@ -1,0 +1,282 @@
+---
+layout: post
+title:  Java UDP和TCP的使用
+date: 2020-08-08 23:00:19
+tags: Java
+color: rgb(34,139,34)
+cover: ''
+subtitle: Java 网络编程：DatagramSocket、DatagramPacket、Socket网络编程
+---
+
+
+
+# UDP协议的特点
+ - 面向无连接的协议
+ 发送端只管发送，不确认对方是否能收到。
+
+ - 基于数据包进行数据传输。
+发送数据的包的大小限制64KB以内
+ - 因为面向无连接，速度快，但是不可靠。会丢失数据。
+
+# UDP协议的使用场景
+在线视频、网络语音电话
+
+
+# UDP协议相关的两个类
+
+# DatagramPacket
+ - 数据包对象
+作用：用来封装要发送或要接收的数据，比如：集装箱。
+# DatagramSocket
+ - 发送对象
+作用：用来发送或接收数据包，比如：码头。
+
+---
+
+# DatagramPacket类构造器
+发送端用:
+
+```java
+new DatagramPacket(byte[] buf, int length, InetAddress address, int port)
+创建发送端数据包对象
+
+buf : 要发送的内容，字节数组
+length : 要发送内容的长度，单位是字节
+address : 接收端的IP地址对象
+port : 接收端的端口号
+```
+接收端用：
+
+```java
+new DatagramPacket(byte[] buf, int length)
+创建接收端的数据包对象
+buf : 用来存储接收到内容
+length : 能够接收内容的长度
+```
+
+# DatagramPacket类常用方法
+
+```java
+int getlength : 获得实际接收到的字节个数
+```
+
+# DatagramSocket类构造方法
+
+```java
+DatagramSocket()创建发送端的Socket对象，系统会随机分配-一个端口号。
+DatagramSocket( int port )创建接收端的Socket对象并指定端口号
+```
+# DatagramSocket类成员方法
+
+```java
+void send(DatagramPacket dp) : 发送数据包
+void receive(DatagramPacket dp) : 接收数据包
+```
+
+# 举例 ： 使用UDP实现客户端发，服务端收。
+
+客户端
+
+```java
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+/**
+ * 客户端
+ * UDP实现客户端发
+ */
+public class udp_client {
+    public static void main(String[] args) throws Exception{
+        System.out.println("启动客户端");
+        //1.创建一个集装箱对象，用于封装需要发送的数据包
+        //参数一：封装数据的字节数组
+        //参数二：发送数据的长度
+        //参数三：服务端的ip地址
+        //参数四：服务端程序的端口号码
+        byte[] buffer = "使用UDP从客户端发送".getBytes();
+        DatagramPacket packet = new DatagramPacket(buffer,buffer.length
+                , InetAddress.getLocalHost(),6666);
+
+        //2.创建一个码头对象
+        //参数可以申明客户端端口，可以有可以没有，默认给一个端口
+        DatagramSocket socket = new DatagramSocket();
+
+        //3.开始发送数据报对象
+        socket.send(packet);
+        socket.close();
+    }
+}
+```
+
+服务端
+```java
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+/**
+ * 服务端
+ * 接受客户端消息
+ */
+public class udp_server {
+    public static void main(String[] args) throws Exception {
+
+        System.out.println("启动服务端程序");
+        //1.创建一个接受客户端的数据包对象(集装箱)
+        /**
+         * new DatagramPacket(byte[] buffer , int length)
+         * 参数一：接受数据的数组
+         * 参数二：接受数据的数组长度
+         */
+        byte[] buffer = new byte[1024];
+        DatagramPacket packet = new DatagramPacket(buffer,buffer.length);
+
+        //2.创建一个接收端的码头对象
+        DatagramSocket socket = new DatagramSocket(6666);
+
+        //3.开始接受
+        socket.receive(packet);
+
+        //4.从集装箱中获取本次读取的数据量
+        int len = packet.getLength();
+
+        //5.输出数据
+        String rs = new String(buffer,0,len);
+        System.out.println(rs);
+
+        socket.close();
+    }
+}
+```
+
+---
+
+# TCP可靠传输通信入门案例
+TCP/IP协议 
+Transfer Control Protocol ==>传输控制协议
+# TCP/IP协议的特点
+- 面向连接的协议
+ - 只能由客户端主动发送数据给服务器端，服务器端接收到数据之后，可以给客户端响应数据。
+ - 通过三次握手建立连接，连接成功形成数据传输通道。
+ - 通过四次挥手断开连接
+ - 基于IO流进行数据传输
+ - 传输数据大小没有限制
+ - 因为面向连接的协议，速度慢，但是是可靠的协议。
+
+
+# TCP协议的使用场景
+
+ - 文件上传和下载
+ - 邮件发送和接收
+ - 远程登录
+
+
+# TCP协议相关的类
+- Socket
+一个该类的对象就代表一个客户端程序。
+
+ - ServerSocket
+一个该类的对象就代表一个服务器端程序。
+
+
+TCP通信也叫Socket网络编程，只要代码基于socket开发，底层就是基于了可靠传输的TCP通信。
+
+
+# Socket类构造方法
+
+```java
+Socket(String host, int port)
+ - 根据ip地址字符串和端口号创建客户端Socket对象
+
+ - 注意事项:只要执行该方法，就会立即连接指定的服务器程序，如果连接不成功，则会抛出异常。
+如果连接成功，则表示三次握手通过。
+```
+
+# Socket类常用方法
+
+```java
+outputstream getoutputstream();获得字节输出流对象
+Inputstream getInputstream() ;获得字节输入流对象
+```
+
+# 客户端的开发流程:
+1. 客户端要求请求于服务端的socket管道连接。
+2. 从socket通信管道中得到一个字节输出流
+3. 通过字节输出流给服务端写出数据。
+
+# 服务端的开发流程：
+1. 注册端口。
+2. 接收客户端的Socket管道连接。
+3. 从socket通信管道中得到一个字节输入流
+4. 从字节输入流中读取客户端发来的数据。
+
+```java
+构造器：public ServerSocket(int port)
+方法：public Socket accept() :
+```
+等待接收一个客户端的Socket管道连接请求， 连接成功返回一个Socket对象。
+
+# 举例：客户端发送一行数据，服务端接收行数据
+
+```java
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.Socket;
+
+//开发客户端
+public class clientDemo1 {
+    public static void main(String[] args) throws Exception{
+        //1.客户端请求服务端，socket管道连接
+        //socket(String host,int port)
+        Socket socket = new Socket("127.0.0.1",8888);
+        //2.从socket通信管道中得到一个字节输出流
+        OutputStream outputStream = socket.getOutputStream();
+        //3.把低级的字节输出流包装成高级的打印流
+        PrintStream printStream = new PrintStream(outputStream);
+        //4.开始发消息出去
+        printStream.println("客户端第一次发消息");
+        printStream.flush();
+        System.out.println("客户端发送完毕");
+    }
+}
+
+```
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * 1. 注册端口。
+ * 2. 接收客户端的Socket管道连接。
+ * 3. 从socket通信管道中得到一个字节输入流
+ * 4. 从字节输入流中读取客户端发来的数据。
+ */
+public class serverDemo2 {
+    public static void main(String[] args) throws Exception {
+        System.out.println("服务端启动");
+        //1.注册端口 public ServerSocket(int port)
+        ServerSocket serverSocket = new ServerSocket(8888);
+        //2.开始接受客户端socket管道
+        Socket accept = serverSocket.accept();
+        //3.从socket通信管道中得到一个字节输入流
+        InputStream inputStream = accept.getInputStream();
+        //4.把字节输入流包装成字符输入流
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        //5.把字符输入流包装成缓冲字符输入流
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        //6.按照行读取消息
+        String msg;//读取一行消息
+        if((msg = bufferedReader.readLine()) != null){
+            System.out.println("收到："+msg);
+        }
+    }
+}
+```
+
+# 小结：
+1. 客户端用Socket连接服务端。
+2. 服务端用ServerSocket注册端口，接收客户端的Socket连接。
+3. 通信是很严格的，对方怎么发，你就应该怎么收，对方发多少你就只能收多少。
+4. 实现的面向连接的socket端到端的通信管道，一方如果出现对象，另一方会出现异常。
